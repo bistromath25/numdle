@@ -25,8 +25,15 @@ export const gameSlice = createSlice({
       state.guessesRemaining = initialState.guessesRemaining;
       state.guessResults = initialState.guessResults;
     },
-    makeGuess: (state) => {
+    loadSaved: (state, action) => {
+      state.correctOrdering = action.payload.correctOrdering;
+      state.numbers = action.payload.numbers;
+      state.guessesRemaining = action.payload.guessesRemaining;
+      state.guessResults = action.payload.guessResults;
+    },
+    makeGuess: (state, action) => {
       if (state.guessesRemaining > 0) {
+        state.numbers = action.payload;
         state.guessesRemaining = state.guessesRemaining - 1;
       }
     },
@@ -37,6 +44,6 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { initialize, makeGuess, updateGuessResults, reset } =
+export const { initialize, loadSaved, makeGuess, updateGuessResults, reset } =
   gameSlice.actions;
 export default gameSlice.reducer;

@@ -11,12 +11,21 @@ const indexItems = (items: { description: string; value: string }[]) => {
   return items.map((item, idx) => ({ idx, item }));
 };
 
+const equal = (
+  item1: { description: string; value: string },
+  item2: { description: string; value: string }
+) => {
+  return item1.description === item2.description && item1.value === item2.value;
+};
+
 export default function List() {
   const {
-    game: { numbers, correctOrdering, guessesRemaining },
+    game: { numbers, correctOrdering, guessesRemaining, guessResults },
   } = useAppSelector((state) => state);
   const [items, setItems] = useState(indexItems(numbers));
-  const [numCorrect, setNumCorrect] = useState(0);
+  const [numCorrect, setNumCorrect] = useState(
+    guessResults.length ? guessResults[guessResults.length - 1] : 0
+  );
   const [gameIsOver, setGameIsOver] = useState(false);
   const [itemStyles] = useState(
     shuffle([
@@ -31,7 +40,9 @@ export default function List() {
   useEffect(() => {
     if (correctOrdering.length > 0) {
       setItems(indexItems(numbers));
-      setNumCorrect(0);
+      setNumCorrect(
+        guessResults.length ? guessResults[guessResults.length - 1] : 0
+      );
       setGameIsOver(false);
     }
   }, [correctOrdering]);
@@ -40,12 +51,13 @@ export default function List() {
     setChanged(true);
   }, [items]);
   const handleOnSubmit = () => {
-    const result = items.map(
-      (item, idx) => item.item.value === correctOrdering[idx].value
+    const result = items.map((item, idx) =>
+      equal(item.item, correctOrdering[idx])
     );
     const newNumCorrect = result.filter((x) => x).length;
     setNumCorrect(newNumCorrect);
-    dispatch(makeGuess());
+    const newNumbers = items.map((item) => item.item);
+    dispatch(makeGuess(newNumbers));
     dispatch(updateGuessResults(newNumCorrect));
     setChanged(false);
   };
@@ -105,7 +117,7 @@ export default function List() {
             <div className='py-2'>
               {!gameIsOver
                 ? item.item.description
-                : `${correctOrdering.indexOf(item.item) + 1}. ${item.item.description} ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
+                : `${correctOrdering.findIndex((x) => equal(item.item, x)) + 1}. ${item.item.description} ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
             </div>
           </Reorder.Item>
         ))}

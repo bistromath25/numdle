@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { randInt } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
-import { initialize } from '../store/reducers/gameSlice';
+import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import Modal from '../components/Modal';
 
 const capitalize = (description: string) => {
@@ -13,6 +13,7 @@ const capitalize = (description: string) => {
 const strip = (description: string) => {
   return (
     description.split('is the number of ')[1] ??
+    description.split('is number of ')[1] ??
     description.split('is the ')[1] ??
     description.split('is a ')[1] ??
     description
@@ -22,6 +23,9 @@ const strip = (description: string) => {
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
   useEffect(() => {
+    const getGameFromLS = () => {
+      return localStorage.getItem('game');
+    };
     const getNumberData = async () => {
       const numbers = [
         randInt(0, 101),
@@ -43,7 +47,12 @@ export default function Header() {
       });
       setNumbers(data);
     };
-    getNumberData();
+    const savedGame = getGameFromLS();
+    if (savedGame) {
+      dispatch(loadSaved(JSON.parse(savedGame)));
+    } else {
+      getNumberData();
+    }
   }, []);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -54,15 +63,11 @@ export default function Header() {
 
   const [infoModalIsOpen, setInfoModalIsOpen] = useState(true);
   const [helpModalIsOpen, setHelpModalIsOpen] = useState(false);
-  const [rocketModalIsOpen, setRocketModalIsOpen] = useState(false);
   const handleCloseInfoModal = () => {
     setInfoModalIsOpen(false);
   };
   const handleCloseHelpModal = () => {
     setHelpModalIsOpen(false);
-  };
-  const handleCloseRocketModal = () => {
-    setRocketModalIsOpen(false);
   };
   return (
     <>

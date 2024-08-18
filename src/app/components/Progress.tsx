@@ -1,11 +1,30 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useAppSelector } from '../store/hooks';
 
 export default function Progress() {
   const {
-    game: { guessesRemaining, guessResults },
+    game: { numbers, correctOrdering, guessesRemaining, guessResults },
   } = useAppSelector((state) => state);
+  useEffect(() => {
+    if (correctOrdering.length > 0) {
+      localStorage.setItem(
+        'game',
+        JSON.stringify({
+          numbers,
+          correctOrdering,
+          guessesRemaining,
+          guessResults,
+        })
+      );
+    }
+  }, [guessResults]);
+  useEffect(() => {
+    if (guessesRemaining === 0 || guessResults[guessResults.length - 1] === 5) {
+      localStorage.removeItem('game');
+    }
+  }, [guessesRemaining]);
   return (
     <div className='flex flex-row space-x-2.5 float-right px-2.5 py-2 rounded-md'>
       {[...guessResults, ...Array(guessesRemaining).fill(-1)].map(
