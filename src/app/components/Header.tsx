@@ -5,6 +5,7 @@ import { randInt } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
+import { decrypt } from '../utils/encrypt';
 
 const capitalize = (description: string) => {
   return description.charAt(0).toUpperCase() + description.slice(1);
@@ -52,7 +53,7 @@ export default function Header() {
     };
     const savedGame = getGameFromLS();
     if (savedGame) {
-      dispatch(loadSaved(JSON.parse(savedGame)));
+      dispatch(loadSaved(JSON.parse(decrypt('game', savedGame))));
     } else {
       getNumberData();
     }

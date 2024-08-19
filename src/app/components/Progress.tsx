@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAppSelector } from '../store/hooks';
+import { encrypt } from '../utils/encrypt';
 
 export default function Progress() {
   const {
@@ -11,11 +12,14 @@ export default function Progress() {
     if (correctOrdering.length > 0) {
       localStorage.setItem(
         'game',
-        JSON.stringify({
-          numbers,
-          guessesRemaining,
-          guessResults,
-        })
+        encrypt(
+          'game',
+          JSON.stringify({
+            numbers,
+            guessesRemaining,
+            guessResults,
+          })
+        )
       );
     }
   }, [correctOrdering, numbers, guessesRemaining, guessResults]);
