@@ -31,6 +31,8 @@ export default function Header() {
     };
     const getNumberData = async () => {
       console.log('getNumberData');
+      console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
       if (supabaseClient) {
         console.log('has supabaseClient');
         console.log('numberMaxId', numberMaxId);
