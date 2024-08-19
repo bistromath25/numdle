@@ -1,5 +1,6 @@
-import { shuffle } from '@/app/utils/shuffle';
 import { createSlice } from '@reduxjs/toolkit';
+import { shuffle } from '@/app/utils/shuffle';
+import { sort } from '@/app/utils/sort';
 
 interface State {
   numbers: { description: string; value: string }[];
@@ -26,8 +27,8 @@ export const gameSlice = createSlice({
       state.guessResults = initialState.guessResults;
     },
     loadSaved: (state, action) => {
-      state.correctOrdering = action.payload.correctOrdering;
       state.numbers = action.payload.numbers;
+      state.correctOrdering = sort(action.payload.numbers);
       state.guessesRemaining = action.payload.guessesRemaining;
       state.guessResults = action.payload.guessResults;
     },

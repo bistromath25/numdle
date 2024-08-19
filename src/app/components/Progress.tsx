@@ -13,7 +13,6 @@ export default function Progress() {
         'game',
         JSON.stringify({
           numbers,
-          correctOrdering,
           guessesRemaining,
           guessResults,
         })
