@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { PublicEnvScript } from 'next-runtime-env';
 import StoreProvider from './store/StoreProvider';
 import './globals.css';
 
@@ -17,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <PublicEnvScript />
+      </head>
       <body className={inter.className}>
         <StoreProvider>{children}</StoreProvider>
       </body>

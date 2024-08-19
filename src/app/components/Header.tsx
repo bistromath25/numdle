@@ -7,6 +7,7 @@ import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
 import { decrypt } from '../utils/encrypt';
 import { supabaseClient, numberMaxId } from '../utils/supabase';
+import { env } from 'next-runtime-env';
 
 const capitalize = (description: string) => {
   return description.charAt(0).toUpperCase() + description.slice(1);
@@ -33,6 +34,8 @@ export default function Header() {
       console.log('getNumberData');
       console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
       console.log(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+      console.log(env('NEXT_PUBLIC_SUPABASE_URL'));
+      console.log(env('NEXT_PUBLIC_SUPABASE_ANON_KEY'));
       if (supabaseClient) {
         console.log('has supabaseClient');
         console.log('numberMaxId', numberMaxId);
