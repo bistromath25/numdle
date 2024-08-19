@@ -27,13 +27,14 @@ export default function List() {
     guessResults.length ? guessResults[guessResults.length - 1] : 0
   );
   const [gameIsOver, setGameIsOver] = useState(false);
+  const [guessButtonIsDisabled, setGuessButtonIsDisabled] = useState(false);
   const [itemStyles] = useState(
     shuffle([
-      'text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-white bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+      'text-black bg-slate-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+      'text-black bg-sky-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+      'text-black bg-amber-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+      'text-black bg-lime-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+      'text-black bg-rose-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
     ])
   );
   const [changed, setChanged] = useState(false);
@@ -45,7 +46,7 @@ export default function List() {
       );
       setGameIsOver(false);
     }
-  }, [correctOrdering]);
+  }, [correctOrdering, guessResults, numbers]);
   const dispatch = useAppDispatch();
   useEffect(() => {
     setChanged(true);
@@ -81,14 +82,26 @@ export default function List() {
     return `You correctly ordered ${numCorrect === 5 ? 'all' : ''} ${numCorrect} number${numCorrect === 1 ? '' : 's'}!`;
   };
   const getGuessButtonStyle = () => {
-    var className = `text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md`;
-    if (!gameIsOver && changed) {
+    var className = `text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 shadow-md`;
+    if (!guessButtonIsDisabled) {
       className += ` hover:bg-gray-100`;
     } else {
       className += ` opacity-40`;
     }
     return className;
   };
+  useEffect(() => {
+    if (guessesRemaining === 5) {
+      setGuessButtonIsDisabled(false);
+    } else if (gameIsOver || !changed) {
+      setGuessButtonIsDisabled(true);
+    } else {
+      const unchangedNumbers = items.filter((item, idx) => {
+        return equal(item.item, numbers[idx]);
+      });
+      setGuessButtonIsDisabled(unchangedNumbers.length === 5);
+    }
+  }, [changed, guessesRemaining, gameIsOver, items, numbers]);
   return (
     <>
       <div
@@ -111,7 +124,7 @@ export default function List() {
           <Reorder.Item
             key={item.item.value}
             value={item}
-            className={itemStyles[item.idx] + ' shadow-md'}
+            className={itemStyles[item.idx] + ' shadow-md cursor-pointer'}
             style={{ width: '500px' }}
           >
             <div className='py-2'>
@@ -126,7 +139,7 @@ export default function List() {
         <button
           type='button'
           onClick={handleOnSubmit}
-          disabled={gameIsOver || !changed}
+          disabled={guessButtonIsDisabled}
           style={{ width: '500px' }}
           className={getGuessButtonStyle()}
         >

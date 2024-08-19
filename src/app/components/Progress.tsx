@@ -19,12 +19,12 @@ export default function Progress() {
         })
       );
     }
-  }, [guessResults]);
+  }, [correctOrdering, numbers, guessesRemaining, guessResults]);
   useEffect(() => {
     if (guessesRemaining === 0 || guessResults[guessResults.length - 1] === 5) {
       localStorage.removeItem('game');
     }
-  }, [guessesRemaining]);
+  }, [guessesRemaining, guessResults]);
   return (
     <div className='flex flex-row space-x-2.5 float-right px-2.5 py-2 rounded-md'>
       {[...guessResults, ...Array(guessesRemaining).fill(-1)].map(

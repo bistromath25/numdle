@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { randInt } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
-import Modal from '../components/Modal';
+import { Modal } from '../components/Modal';
 
 const capitalize = (description: string) => {
   return description.charAt(0).toUpperCase() + description.slice(1);
@@ -22,6 +22,7 @@ const strip = (description: string) => {
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const getGameFromLS = () => {
       return localStorage.getItem('game');
@@ -39,12 +40,14 @@ export default function Header() {
       const p = numbers.join(',');
       const response = await fetch(`http://numbersapi.com/${p}`);
       const result = await response.json();
-      const data = numbers.map((number) => {
-        return {
-          description: capitalize(strip(result[number])),
-          value: number,
-        };
-      });
+      const data = numbers
+        .map((number) => {
+          return {
+            description: capitalize(strip(result[number])),
+            value: number,
+          };
+        })
+        .slice(0, 5);
       setNumbers(data);
     };
     const savedGame = getGameFromLS();
@@ -53,21 +56,23 @@ export default function Header() {
     } else {
       getNumberData();
     }
-  }, []);
-  const dispatch = useAppDispatch();
+  }, [dispatch]);
   useEffect(() => {
     if (numbers.length > 0) {
       dispatch(initialize({ numbers: numbers }));
     }
-  }, [numbers]);
-
+  }, [dispatch, numbers]);
   const [infoModalIsOpen, setInfoModalIsOpen] = useState(true);
-  const [helpModalIsOpen, setHelpModalIsOpen] = useState(false);
+  const [statsModalIsOpen, setStatsModalIsOpen] = useState(false);
+  const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false);
   const handleCloseInfoModal = () => {
     setInfoModalIsOpen(false);
   };
-  const handleCloseHelpModal = () => {
-    setHelpModalIsOpen(false);
+  const handleCloseSettingsModal = () => {
+    setSettingsModalIsOpen(false);
+  };
+  const handleCloseStatsModal = () => {
+    setStatsModalIsOpen(false);
   };
   return (
     <>
@@ -91,8 +96,14 @@ export default function Header() {
               i
             </button>
             <button
+              className='w-10 h-10 text-lg text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md hover:bg-gray-100'
+              onClick={() => setStatsModalIsOpen(true)}
+            >
+              🏆
+            </button>
+            <button
               className='w-10 h-10 text-m text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md hover:bg-gray-100'
-              onClick={() => setHelpModalIsOpen(true)}
+              onClick={() => setSettingsModalIsOpen(true)}
             >
               &middot; &middot; &middot;
             </button>
@@ -106,11 +117,18 @@ export default function Header() {
           closeCopy='START'
         />
         <Modal
-          modalIsOpen={helpModalIsOpen}
-          onClose={handleCloseHelpModal}
+          modalIsOpen={statsModalIsOpen}
+          onClose={handleCloseStatsModal}
+          titleCopy='Results'
+          bodyCopy='Stay tuned...'
+          closeCopy='GOT IT'
+        />
+        <Modal
+          modalIsOpen={settingsModalIsOpen}
+          onClose={handleCloseSettingsModal}
           titleCopy='Settings'
           bodyCopy='Find us on Github!'
-          closeCopy='GOT IT'
+          closeCopy='ALL SET'
         />
       </div>
     </>

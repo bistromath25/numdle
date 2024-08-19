@@ -1,16 +1,20 @@
+import { ReactElement } from 'react';
+
 export interface ModalProps {
   modalIsOpen: boolean;
   onClose: () => void;
-  titleCopy: string;
-  bodyCopy: string;
-  closeCopy: string;
+  titleCopy?: string;
+  bodyCopy?: string;
+  bodyDiv?: ReactElement;
+  closeCopy?: string;
 }
 
-export default function Modal({
+export function Modal({
   modalIsOpen,
   onClose,
   titleCopy,
   bodyCopy,
+  bodyDiv,
   closeCopy,
 }: ModalProps) {
   return modalIsOpen ? (
@@ -28,9 +32,13 @@ export default function Modal({
               <h3 className='text-3xl font-semibold'>{titleCopy}</h3>
             </div>
             <div className='relative p-6 flex-auto'>
-              <p className='my-4 text-blueGray-500 text-lg leading-relaxed'>
-                {bodyCopy}
-              </p>
+              {bodyDiv ? (
+                bodyDiv
+              ) : (
+                <p className='my-4 text-blueGray-500 text-lg leading-relaxed'>
+                  {bodyCopy}
+                </p>
+              )}
             </div>
             <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
               <button
