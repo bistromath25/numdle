@@ -30,7 +30,10 @@ export default function Header() {
       return localStorage.getItem('game');
     };
     const getNumberData = async () => {
+      console.log('getNumberData');
       if (supabaseClient) {
+        console.log('has supabaseClient');
+        console.log('numberMaxId', numberMaxId);
         const numbersToGet = randInts(
           numberMaxId ? parseInt(numberMaxId) : 5,
           5
@@ -46,6 +49,8 @@ export default function Header() {
             value: n.value as string,
           };
         });
+        console.log('result', result);
+        console.log('resultNumbers', resultNumbers);
         if (resultNumbers) {
           setNumbers(resultNumbers);
         }
