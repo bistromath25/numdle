@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { randInt } from '../utils/randInt';
+import { randInts } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
 import { decrypt } from '../utils/encrypt';
+import { supabaseClient, numberMaxId } from '../utils/supabase';
 
 const capitalize = (description: string) => {
   return description.charAt(0).toUpperCase() + description.slice(1);
@@ -29,27 +30,26 @@ export default function Header() {
       return localStorage.getItem('game');
     };
     const getNumberData = async () => {
-      const numbers = [
-        randInt(0, 101),
-        randInt(0, 101),
-        randInt(0, 101),
-        randInt(0, 101),
-        randInt(0, 101),
-      ]
-        .sort()
-        .map((x) => x.toString());
-      const p = numbers.join(',');
-      const response = await fetch(`http://numbersapi.com/${p}`);
-      const result = await response.json();
-      const data = numbers
-        .map((number) => {
+      if (supabaseClient) {
+        const numbersToGet = randInts(
+          numberMaxId ? parseInt(numberMaxId) : 5,
+          5
+        );
+        const response = await supabaseClient
+          .from('numbers')
+          .select()
+          .in('id', numbersToGet);
+        const result = response.data;
+        const resultNumbers = result?.map((n) => {
           return {
-            description: capitalize(strip(result[number])),
-            value: number,
+            description: capitalize(n.description[0]),
+            value: n.value as string,
           };
-        })
-        .slice(0, 5);
-      setNumbers(data);
+        });
+        if (resultNumbers) {
+          setNumbers(resultNumbers);
+        }
+      }
     };
     const savedGame = getGameFromLS();
     if (savedGame) {
