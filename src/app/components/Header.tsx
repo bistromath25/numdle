@@ -30,12 +30,7 @@ export default function Header() {
       return localStorage.getItem('game');
     };
     const getNumberData = async () => {
-      console.log('getNumberData');
-      console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
-      console.log(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
       if (supabaseClient) {
-        console.log('has supabaseClient');
-        console.log('numberMaxId', numberMaxId);
         const numbersToGet = randInts(
           numberMaxId ? parseInt(numberMaxId) : 5,
           5
