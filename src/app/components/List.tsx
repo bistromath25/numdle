@@ -3,20 +3,14 @@
 import { Reorder } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { makeGuess, updateGuessResults } from '../store/reducers/gameSlice';
+import {
+  initialize,
+  makeGuess,
+  updateGuessResults,
+} from '../store/reducers/gameSlice';
 import Progress from '../components/Progress';
-import { shuffle } from '../utils/shuffle';
-
-const indexItems = (items: { description: string; value: string }[]) => {
-  return items.map((item, idx) => ({ idx, item }));
-};
-
-const equal = (
-  item1: { description: string; value: string },
-  item2: { description: string; value: string }
-) => {
-  return item1.description === item2.description && item1.value === item2.value;
-};
+import { equal, indexItems, itemStylesClassNames, shuffle } from '../utils/utils';
+import { getNumberData } from '../utils/supabase';
 
 export default function List() {
   const {
@@ -28,14 +22,8 @@ export default function List() {
   );
   const [gameIsOver, setGameIsOver] = useState(false);
   const [guessButtonIsDisabled, setGuessButtonIsDisabled] = useState(false);
-  const [itemStyles] = useState(
-    shuffle([
-      'text-black bg-slate-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-black bg-sky-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-black bg-amber-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-black bg-lime-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-      'text-black bg-rose-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-    ])
+  const [itemStyles, setItemStyles] = useState(
+    shuffle(itemStylesClassNames)
   );
   const [changed, setChanged] = useState(false);
   useEffect(() => {
@@ -60,6 +48,8 @@ export default function List() {
     const newNumbers = items.map((item) => item.item);
     dispatch(makeGuess(newNumbers));
     dispatch(updateGuessResults(newNumCorrect));
+    const newItemStyles = items.map((item) => itemStyles[item.idx]);
+    setItemStyles(newItemStyles);
     setChanged(false);
   };
   useEffect(() => {
@@ -90,6 +80,9 @@ export default function List() {
     }
     return className;
   };
+  const getPlayAgainButtonStyle = () => {
+    return `text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 shadow-md hover:bg-gray-100`;
+  };
   useEffect(() => {
     if (guessesRemaining === 5) {
       setGuessButtonIsDisabled(false);
@@ -102,6 +95,13 @@ export default function List() {
       setGuessButtonIsDisabled(unchangedNumbers.length === 5);
     }
   }, [changed, guessesRemaining, gameIsOver, items, numbers]);
+  const handleOnPlayAgain = () => {
+    getNumberData().then((resultNumbers) => {
+      if (resultNumbers) {
+        dispatch(initialize({ numbers: resultNumbers }));
+      }
+    });
+  };
   return (
     <>
       <div
@@ -135,7 +135,17 @@ export default function List() {
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      {!gameIsOver && (
+      {gameIsOver ? (
+        <button
+          type='button'
+          onClick={handleOnPlayAgain}
+          disabled={false}
+          style={{ width: '500px' }}
+          className={getPlayAgainButtonStyle()}
+        >
+          PLAY AGAIN
+        </button>
+      ) : (
         <button
           type='button'
           onClick={handleOnSubmit}

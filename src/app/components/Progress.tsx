@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAppSelector } from '../store/hooks';
-import { encrypt } from '../utils/encrypt';
+import { encrypt } from '../utils/utils';
 
 export default function Progress() {
   const {
@@ -23,11 +23,6 @@ export default function Progress() {
       );
     }
   }, [correctOrdering, numbers, guessesRemaining, guessResults]);
-  useEffect(() => {
-    if (guessesRemaining === 0 || guessResults[guessResults.length - 1] === 5) {
-      localStorage.removeItem('game');
-    }
-  }, [guessesRemaining, guessResults]);
   return (
     <div className='flex flex-row space-x-2.5 float-right px-2.5 py-2 rounded-md'>
       {[...guessResults, ...Array(guessesRemaining).fill(-1)].map(

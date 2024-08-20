@@ -1,26 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { randInt, randInts, randItem } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
-import { decrypt } from '../utils/encrypt';
-import { supabaseClient, numberMaxId } from '../utils/supabase';
-
-const capitalize = (description: string) => {
-  return description.charAt(0).toUpperCase() + description.slice(1);
-};
-
-const strip = (description: string) => {
-  return (
-    description.split('is the number of ')[1] ??
-    description.split('is number of ')[1] ??
-    description.split('is the ')[1] ??
-    description.split('is a ')[1] ??
-    description
-  ).slice(0, -1);
-};
+import { decrypt } from '../utils/utils';
+import { getNumberData } from '../utils/supabase';
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
@@ -29,28 +14,15 @@ export default function Header() {
     const getGameFromLS = () => {
       return localStorage.getItem('game');
     };
-    const getNumberData = async () => {
-      const numbersToGet = randInts(numberMaxId ? parseInt(numberMaxId) : 5, 5);
-      const response = await supabaseClient
-        .from('numbers')
-        .select()
-        .in('id', numbersToGet);
-      const result = response.data;
-      const resultNumbers = result?.map((n) => {
-        return {
-          description: capitalize(randItem(n.description)),
-          value: n.value as string,
-        };
-      });
-      if (resultNumbers) {
-        setNumbers(resultNumbers);
-      }
-    };
     const savedGame = getGameFromLS();
     if (savedGame) {
       dispatch(loadSaved(JSON.parse(decrypt('game', savedGame))));
     } else {
-      getNumberData();
+      getNumberData().then((resultNumbers) => {
+        if (resultNumbers) {
+          setNumbers(resultNumbers);
+        }
+      });
     }
   }, [dispatch]);
   useEffect(() => {

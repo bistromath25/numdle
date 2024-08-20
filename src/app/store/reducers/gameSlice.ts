@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { shuffle } from '@/app/utils/shuffle';
-import { sort } from '@/app/utils/sort';
+import { shuffle } from '@/app/utils/utils';
+import { sort } from '@/app/utils/utils';
 
 interface State {
   numbers: { description: string; value: string }[];
