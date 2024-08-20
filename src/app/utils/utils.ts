@@ -71,9 +71,9 @@ export const decrypt = (salt, encoded) => {
 };
 
 export const itemStylesClassNames = [
-  'text-black bg-stone-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-  'text-black bg-lime-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-  'text-black bg-emerald-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
-  'text-black bg-cyan-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+  'text-black bg-amber-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+  'text-black bg-green-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+  'text-black bg-teal-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
+  'text-black bg-sky-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
   'text-black bg-blue-50 focus:ring-4 font-medium rounded-lg text-m px-5 py-2.5 text-center me-2 mb-2',
 ];
