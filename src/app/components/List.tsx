@@ -76,10 +76,10 @@ export default function List() {
   };
   const getGuessButtonStyle = () => {
     var className = `text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 shadow-md`;
-    if (!guessButtonIsDisabled) {
-      className += ` hover:bg-gray-100`;
-    } else {
+    if (guessButtonIsDisabled) {
       className += ` opacity-40`;
+    } else {
+      className += ` hover:bg-gray-100`;
     }
     return className;
   };
@@ -131,9 +131,9 @@ export default function List() {
             style={{ width: '500px' }}
           >
             <div className='py-2'>
-              {!gameIsOver
-                ? item.item.description
-                : `${item.item.description} (${item.item.value}) ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
+              {gameIsOver
+                ? `${item.item.description} (${item.item.value}) ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`
+                : item.item.description}
             </div>
           </Reorder.Item>
         ))}
