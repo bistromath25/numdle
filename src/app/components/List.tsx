@@ -9,7 +9,12 @@ import {
   updateGuessResults,
 } from '../store/reducers/gameSlice';
 import Progress from '../components/Progress';
-import { equal, indexItems, itemStylesClassNames, shuffle } from '../utils/utils';
+import {
+  equal,
+  indexItems,
+  itemStylesClassNames,
+  shuffle,
+} from '../utils/utils';
 import { getNumberData } from '../utils/supabase';
 
 export default function List() {
@@ -22,9 +27,7 @@ export default function List() {
   );
   const [gameIsOver, setGameIsOver] = useState(false);
   const [guessButtonIsDisabled, setGuessButtonIsDisabled] = useState(false);
-  const [itemStyles, setItemStyles] = useState(
-    shuffle(itemStylesClassNames)
-  );
+  const [itemStyles, setItemStyles] = useState(shuffle(itemStylesClassNames));
   const [changed, setChanged] = useState(false);
   useEffect(() => {
     if (correctOrdering.length > 0) {
@@ -135,27 +138,17 @@ export default function List() {
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      {gameIsOver ? (
-        <button
-          type='button'
-          onClick={handleOnPlayAgain}
-          disabled={false}
-          style={{ width: '500px' }}
-          className={getPlayAgainButtonStyle()}
-        >
-          PLAY AGAIN
-        </button>
-      ) : (
-        <button
-          type='button'
-          onClick={handleOnSubmit}
-          disabled={guessButtonIsDisabled}
-          style={{ width: '500px' }}
-          className={getGuessButtonStyle()}
-        >
-          GUESS
-        </button>
-      )}
+      <button
+        type='button'
+        onClick={gameIsOver ? handleOnPlayAgain : handleOnSubmit}
+        disabled={gameIsOver ? false : guessButtonIsDisabled}
+        style={{ width: '500px' }}
+        className={
+          gameIsOver ? getPlayAgainButtonStyle() : getGuessButtonStyle()
+        }
+      >
+        {gameIsOver ? `PLAY AGAIN` : `GUESS`}
+      </button>
     </>
   );
 }
