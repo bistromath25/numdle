@@ -9,7 +9,12 @@ import {
   updateGuessResults,
 } from '../store/reducers/gameSlice';
 import Progress from '../components/Progress';
-import { equal, indexItems, itemStylesClassNames, shuffle } from '../utils/utils';
+import {
+  equal,
+  indexItems,
+  itemStylesClassNames,
+  shuffle,
+} from '../utils/utils';
 import { getNumberData } from '../utils/supabase';
 
 export default function List() {
@@ -22,9 +27,7 @@ export default function List() {
   );
   const [gameIsOver, setGameIsOver] = useState(false);
   const [guessButtonIsDisabled, setGuessButtonIsDisabled] = useState(false);
-  const [itemStyles, setItemStyles] = useState(
-    shuffle(itemStylesClassNames)
-  );
+  const [itemStyles, setItemStyles] = useState(shuffle(itemStylesClassNames));
   const [changed, setChanged] = useState(false);
   useEffect(() => {
     if (correctOrdering.length > 0) {
@@ -73,10 +76,10 @@ export default function List() {
   };
   const getGuessButtonStyle = () => {
     var className = `text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 shadow-md`;
-    if (!guessButtonIsDisabled) {
-      className += ` hover:bg-gray-100`;
-    } else {
+    if (guessButtonIsDisabled) {
       className += ` opacity-40`;
+    } else {
+      className += ` hover:bg-gray-100`;
     }
     return className;
   };
@@ -128,34 +131,24 @@ export default function List() {
             style={{ width: '500px' }}
           >
             <div className='py-2'>
-              {!gameIsOver
-                ? item.item.description
-                : `${correctOrdering.findIndex((x) => equal(item.item, x)) + 1}. ${item.item.description} ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
+              {gameIsOver
+                ? `${item.item.description} (${item.item.value}) ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`
+                : item.item.description}
             </div>
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      {gameIsOver ? (
-        <button
-          type='button'
-          onClick={handleOnPlayAgain}
-          disabled={false}
-          style={{ width: '500px' }}
-          className={getPlayAgainButtonStyle()}
-        >
-          PLAY AGAIN
-        </button>
-      ) : (
-        <button
-          type='button'
-          onClick={handleOnSubmit}
-          disabled={guessButtonIsDisabled}
-          style={{ width: '500px' }}
-          className={getGuessButtonStyle()}
-        >
-          GUESS
-        </button>
-      )}
+      <button
+        type='button'
+        onClick={gameIsOver ? handleOnPlayAgain : handleOnSubmit}
+        disabled={gameIsOver ? false : guessButtonIsDisabled}
+        style={{ width: '500px' }}
+        className={
+          gameIsOver ? getPlayAgainButtonStyle() : getGuessButtonStyle()
+        }
+      >
+        {gameIsOver ? `PLAY AGAIN` : `GUESS`}
+      </button>
     </>
   );
 }

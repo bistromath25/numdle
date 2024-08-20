@@ -6,6 +6,7 @@ import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
 import { decrypt } from '../utils/utils';
 import { getNumberData } from '../utils/supabase';
+import Link from 'next/link';
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
@@ -47,6 +48,9 @@ export default function Header() {
       <div className='content-center text-center w-screen grid grid-cols-3 gap-4 bg-white shadow-md'>
         <div>
           <div className='flex flex-row space-x-2 float-left px-4 py-4'>
+            <Link href='https://github.com/bistromath25/numdle'>
+              <img src='../../favicon.ico' className='w-9 h-9'></img>
+            </Link>
             <h1 className='text-3xl font-bold'>NUMDLE</h1>
           </div>
         </div>
@@ -96,6 +100,20 @@ export default function Header() {
           onClose={handleCloseSettingsModal}
           titleCopy='Settings'
           bodyCopy='Find us on Github!'
+          bodyDiv={
+            <span>
+              <p>
+                Find us on{' '}
+                <a
+                  href='https://github.com/bistromath25/numdle'
+                  className='underline'
+                >
+                  Github
+                </a>
+                !
+              </p>
+            </span>
+          }
           closeCopy='ALL SET'
         />
       </div>
