@@ -133,7 +133,7 @@ export default function List() {
             <div className='py-2'>
               {!gameIsOver
                 ? item.item.description
-                : `${correctOrdering.findIndex((x) => equal(item.item, x)) + 1}. ${item.item.description} ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
+                : `${item.item.description} (${item.item.value}) ${item.item.value === correctOrdering[idx].value ? '✅' : ''}`}
             </div>
           </Reorder.Item>
         ))}
