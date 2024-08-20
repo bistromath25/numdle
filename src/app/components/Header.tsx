@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { randInts } from '../utils/randInt';
+import { randInt, randInts, randItem } from '../utils/randInt';
 import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
@@ -30,25 +30,20 @@ export default function Header() {
       return localStorage.getItem('game');
     };
     const getNumberData = async () => {
-      if (supabaseClient) {
-        const numbersToGet = randInts(
-          numberMaxId ? parseInt(numberMaxId) : 5,
-          5
-        );
-        const response = await supabaseClient
-          .from('numbers')
-          .select()
-          .in('id', numbersToGet);
-        const result = response.data;
-        const resultNumbers = result?.map((n) => {
-          return {
-            description: capitalize(n.description[0]),
-            value: n.value as string,
-          };
-        });
-        if (resultNumbers) {
-          setNumbers(resultNumbers);
-        }
+      const numbersToGet = randInts(numberMaxId ? parseInt(numberMaxId) : 5, 5);
+      const response = await supabaseClient
+        .from('numbers')
+        .select()
+        .in('id', numbersToGet);
+      const result = response.data;
+      const resultNumbers = result?.map((n) => {
+        return {
+          description: capitalize(randItem(n.description)),
+          value: n.value as string,
+        };
+      });
+      if (resultNumbers) {
+        setNumbers(resultNumbers);
       }
     };
     const savedGame = getGameFromLS();
