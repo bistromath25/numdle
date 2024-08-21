@@ -21,8 +21,8 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     initialize: (state, action) => {
-      state.correctOrdering = action.payload.numbers;
-      state.numbers = shuffle(state.correctOrdering);
+      state.numbers = action.payload.numbers;
+      state.correctOrdering = sort(action.payload.numbers);
       state.guessesRemaining = initialState.guessesRemaining;
       state.guessResults = initialState.guessResults;
     },
