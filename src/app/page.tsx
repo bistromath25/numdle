@@ -9,7 +9,7 @@ const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
 export default function Home() {
   return (
     <main
-      className={`flex min-h-screen flex-col items-center space-y-8 ${robotoSlab.className}`}
+      className={`flex min-h-screen min-w-max flex-col items-center space-y-8 ${robotoSlab.className}`}
     >
       <Header />
       <List />

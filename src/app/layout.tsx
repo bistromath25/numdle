@@ -16,10 +16,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
-        <StoreProvider>{children}</StoreProvider>
-      </body>
-    </html>
+    <>
+      <head>
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1.0'
+        ></meta>
+      </head>
+      <html lang='en'>
+        <body className={inter.className}>
+          <StoreProvider>{children}</StoreProvider>
+        </body>
+      </html>
+    </>
   );
 }

@@ -55,6 +55,13 @@ export default function List() {
     setItemStyles(newItemStyles);
     setChanged(false);
   };
+  const handleOnPlayAgain = () => {
+    getNumberData().then((resultNumbers) => {
+      if (resultNumbers) {
+        dispatch(initialize({ numbers: resultNumbers }));
+      }
+    });
+  };
   useEffect(() => {
     setGameIsOver(numCorrect === 5 || guessesRemaining === 0);
   }, [numCorrect, guessesRemaining]);
@@ -98,17 +105,10 @@ export default function List() {
       setGuessButtonIsDisabled(unchangedNumbers.length === 5);
     }
   }, [changed, guessesRemaining, gameIsOver, items, numbers]);
-  const handleOnPlayAgain = () => {
-    getNumberData().then((resultNumbers) => {
-      if (resultNumbers) {
-        dispatch(initialize({ numbers: resultNumbers }));
-      }
-    });
-  };
   return (
     <>
       <div
-        className='text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-2.5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md'
+        className='text-gray-900 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-2.5 py-2.5 me-2 mb-2 shadow-md'
         style={{ width: '500px' }}
       >
         <div className='text-2xl flex flex-row space-x-4 float-left py-1 pl-2'>
