@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Head from 'next/head';
 import StoreProvider from './store/StoreProvider';
 import './globals.css';
 
@@ -17,12 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <head>
+      <Head>
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1.0'
         ></meta>
-      </head>
+      </Head>
       <html lang='en'>
         <body className={inter.className}>
           <StoreProvider>{children}</StoreProvider>

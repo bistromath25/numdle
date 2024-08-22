@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useScreenSize } from '../store/hooks';
+import { useAppDispatch } from '../store/hooks';
 import { initialize, loadSaved } from '../store/reducers/gameSlice';
 import { Modal } from '../components/Modal';
 import { decrypt } from '../utils/utils';
@@ -10,9 +10,8 @@ import Link from 'next/link';
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
-  const screenSize = useScreenSize();
-  const isSmallScreen = screenSize.width < 768;
-  const isLargeScreen = screenSize.width > 1280;
+  const isSmallScreen = window.innerWidth < 768;
+  const isLargeScreen = window.innerWidth > 1280;
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getGameFromLS = () => {
@@ -49,7 +48,7 @@ export default function Header() {
   return (
     <>
       <div
-        className={`content-center text-center w-${isSmallScreen ? 'full' : 'screen'} grid grid-cols-${isSmallScreen ? '2' : '3'} ${isSmallScreen ? '' : 'gap-4'} bg-white shadow-md`}
+        className={`content-center text-center w-${isSmallScreen ? 'full' : 'screen'} grid grid-cols-${isSmallScreen ? '2' : '3'} gap-4 bg-white shadow-md`}
       >
         <div>
           <div className='flex flex-row space-x-2 float-left px-4 py-4'>
