@@ -10,8 +10,12 @@ import Link from 'next/link';
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
-  const isSmallScreen = window.innerWidth < 768;
-  const isLargeScreen = window.innerWidth > 1280;
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  useEffect(() => {
+    setIsSmallScreen(window.innerWidth < 768);
+    setIsLargeScreen(window.innerWidth > 1280);
+  }, []);
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getGameFromLS = () => {
