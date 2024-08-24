@@ -10,12 +10,6 @@ import Link from 'next/link';
 
 export default function Header() {
   const [numbers, setNumbers] = useState<any[]>([]);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-  useEffect(() => {
-    setIsSmallScreen(window.innerWidth < 768);
-    setIsLargeScreen(window.innerWidth > 1280);
-  }, []);
   const dispatch = useAppDispatch();
   useEffect(() => {
     const getGameFromLS = () => {
@@ -52,7 +46,8 @@ export default function Header() {
   return (
     <>
       <div
-        className={`content-center text-center w-${isSmallScreen ? 'full' : 'screen'} grid grid-cols-${isSmallScreen ? '2' : '3'} gap-4 bg-white shadow-md`}
+        className='content-center text-center w-screen grid grid-cols-2 gap-4 bg-white shadow-md lg:grid-cols-3'
+        style={{ minWidth: '500px' }}
       >
         <div>
           <div className='flex flex-row space-x-2 float-left px-4 py-4'>
@@ -62,23 +57,12 @@ export default function Header() {
             <h1 className='text-3xl font-bold'>NUMDLE</h1>
           </div>
         </div>
-        {!isSmallScreen && (
-          <div>
-            <h2 className='text-2xl font-bold w-full pt-1'>
-              {isLargeScreen ? (
-                <>
-                  Order the numbers from smallest to<br></br>largest in 5
-                  guesses or less!
-                </>
-              ) : (
-                <>
-                  Order the numbers from smallest to largest in 5 guesses or
-                  less!
-                </>
-              )}
-            </h2>
-          </div>
-        )}
+        <div className='hidden lg:block'>
+          <h2 className='text-2xl font-bold w-full pt-1'>
+            Order the numbers from smallest to<br></br>largest in 5 guesses or
+            less!
+          </h2>
+        </div>
         <div>
           <div className='flex flex-row space-x-2 float-right px-4 py-4'>
             <button
@@ -137,13 +121,11 @@ export default function Header() {
           closeCopy='ALL SET'
         />
       </div>
-      {isSmallScreen && (
-        <div>
-          <h2 className='text-md font-bold w-full pt-1'>
-            Order the numbers from smallest to largest in 5 guesses or less!
-          </h2>
-        </div>
-      )}
+      <div className='lg:hidden'>
+        <h2 className='text-md font-bold w-full pt-1'>
+          Order the numbers from smallest to largest in 5 guesses or less!
+        </h2>
+      </div>
     </>
   );
 }
