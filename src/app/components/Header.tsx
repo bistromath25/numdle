@@ -45,7 +45,10 @@ export default function Header() {
   };
   return (
     <>
-      <div className='content-center text-center w-screen grid grid-cols-3 gap-4 bg-white shadow-md'>
+      <div
+        className='content-center text-center w-screen grid grid-cols-2 gap-4 bg-white shadow-md lg:grid-cols-3'
+        style={{ minWidth: '500px' }}
+      >
         <div>
           <div className='flex flex-row space-x-2 float-left px-4 py-4'>
             <Link href='https://github.com/bistromath25/numdle'>
@@ -54,27 +57,28 @@ export default function Header() {
             <h1 className='text-3xl font-bold'>NUMDLE</h1>
           </div>
         </div>
-        <div>
+        <div className='hidden lg:block'>
           <h2 className='text-2xl font-bold w-full pt-1'>
-            Order the numbers from smallest to largest in 5 guesses or less!
+            Order the numbers from smallest to<br></br>largest in 5 guesses or
+            less!
           </h2>
         </div>
         <div>
           <div className='flex flex-row space-x-2 float-right px-4 py-4'>
             <button
-              className='w-10 h-10 text-lg text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md hover:bg-gray-100'
+              className='w-10 h-10 text-lg text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm shadow-md hover:bg-gray-100'
               onClick={() => setInfoModalIsOpen(true)}
             >
               i
             </button>
             <button
-              className='w-10 h-10 text-lg text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md hover:bg-gray-100'
+              className='w-10 h-10 text-lg text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm shadow-md hover:bg-gray-100'
               onClick={() => setStatsModalIsOpen(true)}
             >
               🏆
             </button>
             <button
-              className='w-10 h-10 text-m text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 shadow-md hover:bg-gray-100'
+              className='w-10 h-10 text-m text-gray-600 bg-white border border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm shadow-md hover:bg-gray-100'
               onClick={() => setSettingsModalIsOpen(true)}
             >
               &middot; &middot; &middot;
@@ -116,6 +120,11 @@ export default function Header() {
           }
           closeCopy='ALL SET'
         />
+      </div>
+      <div className='lg:hidden'>
+        <h2 className='text-md font-bold w-full pt-1'>
+          Order the numbers from smallest to largest in 5 guesses or less!
+        </h2>
       </div>
     </>
   );
