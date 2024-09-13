@@ -55,12 +55,14 @@ export default function List() {
     setItemStyles(newItemStyles);
     setChanged(false);
   };
-  const handleOnPlayAgain = () => {
-    getNumberData().then((resultNumbers) => {
-      if (resultNumbers) {
-        dispatch(initialize({ numbers: resultNumbers }));
-      }
+  const handleOnPlayAgain = async () => {
+    const response = await fetch('/api/numbers', {
+      method: 'GET',
     });
+    if (response.ok) {
+      const { data } = await response.json();
+      dispatch(initialize({ numbers: data }));
+    }
   };
   useEffect(() => {
     setGameIsOver(numCorrect === 5 || guessesRemaining === 0);
