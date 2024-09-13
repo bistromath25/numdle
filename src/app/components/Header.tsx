@@ -15,15 +15,20 @@ export default function Header() {
     const getGameFromLS = () => {
       return localStorage.getItem('game');
     };
+    const getNewNumbers = async () => {
+      const response = await fetch('/api/numbers', {
+        method: 'GET',
+      });
+      if (response.ok) {
+        const { data } = await response.json();
+        setNumbers(data);
+      }
+    };
     const savedGame = getGameFromLS();
     if (savedGame) {
       dispatch(loadSaved(JSON.parse(decrypt('game', savedGame))));
     } else {
-      getNumberData().then((resultNumbers) => {
-        if (resultNumbers) {
-          setNumbers(resultNumbers);
-        }
-      });
+      getNewNumbers();
     }
   }, [dispatch]);
   useEffect(() => {
